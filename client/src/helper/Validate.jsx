@@ -28,7 +28,7 @@ export async function passwordValidate (values){
 }
 
 function passwordVerify(errors = {}, values) {
-    // const specialCharacters = /[ `!@#$%^&?|*()-_=+[]{};:'",<.>\/]/;
+    const specialCharacters = /[ `!@#$%^&?|*()-_=+[]{};:'",<.>\/]/;
   
     if (!values.password) {
       errors.password = toast.error("Password Required....!");
@@ -37,9 +37,9 @@ function passwordVerify(errors = {}, values) {
     } else if (values.password.length < 4) {
       errors.password = toast.error("Password Must be more than 4 characters long");
     } 
-    // else if (!specialCharacters.test(values.password)) {
-    //   errors.password = toast.error("Password must have special characters");
-    // }
+    else if (specialCharacters.test(values.password)) {
+      errors.password = toast.error("Password must have special characters");
+    }
 
     return errors;
   }
@@ -51,4 +51,26 @@ if(values.password !== values.confirm_password){
 errors.exit = toast.error("Password not match...!");
 return errors;
 }
+  }
+
+  /***Validate register form */
+
+  export async function registerValidation(values){
+const error = usernameVerify({},values);
+passwordVerify(error,values)
+emailVerify(error,values)
+return error
+  }
+
+  /***Email Validation */
+  function emailVerify (error={},values){
+if(!values.email){
+  error.email = toast.error("Email Required...!")
+}else if(!values.email.trim()){
+error.email = toast.error("Wrong Email...!")
+}
+else if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(values.email)) {
+  error.email = toast.error("Invalid Email Address");
+}
+return error
   }
