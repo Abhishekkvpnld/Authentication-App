@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import Avatar from '../Assets/profile.png';
 import '../styles/register.css';
-import {Toaster} from "react-hot-toast";
+import  toast,{Toaster} from "react-hot-toast";
 import {useFormik} from "formik"
 import {registerValidation} from "../helper/Validate"
 import convertToBase64  from "../helper/convert"
+import {registerUser} from '../helper/helper.jsx'
 
 function Register() {
 
+  const navigate = useNavigate();
   const [file,setFile] = useState()
   const formik = useFormik({
    
@@ -22,10 +24,21 @@ function Register() {
     validate:registerValidation,
     onSubmit: async values =>{
       values = Object.assign(values,{profile:file || ''})
+      let registerPromise = registerUser(values);
+      toast.promise(registerPromise,{
+        loading:'Creating...!',
+        success:<b>Register Successfully...!</b>,
+        error:<b>Could not Register...!</b>
+      })
+console.log(registerPromise);
+registerPromise.then(()=>{
+  navigate('/')
+})
       console.log(values)
     }
   }); 
 
+  /**converting file to base64 format */
 const onUpload = async e =>{
   const base64 = await convertToBase64(e.target.files[0])
   setFile(base64)

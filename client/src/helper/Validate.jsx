@@ -1,10 +1,18 @@
 import toast from "react-hot-toast";
-
+import { authenticate } from "./helper";
 
 /**Username validation */
 
 export async function usernameValidate(values){
     const error = usernameVerify({},values)
+    if(values.username){
+      //check user exist or not
+      const {status} = await authenticate(values.username);
+
+      if(status !== 200){
+        error.exist = toast.error("User doesn't exist...!")
+      }
+    }
     return error;
 }
 
@@ -73,4 +81,10 @@ else if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(values.email)) {
   error.email = toast.error("Invalid Email Address");
 }
 return error
+  }
+
+  /**validate profile page */
+  export async function profileValidation( values){
+    const errors = emailVerify({},values)
+    return errors
   }

@@ -13,6 +13,9 @@ import PageNotFound from './Components/PageNotFound';
 import Profile from './Components/Profile';
 
 
+//Auth middlewares
+import { AutherizeUser,ProtectRoute } from './Middlewares/auth';
+
 //All routes
 
 const router = createBrowserRouter([
@@ -22,27 +25,27 @@ const router = createBrowserRouter([
   },
   {
 path:"/register",
-element:<Register></Register>
+element:<Register/>
   },
   {
     path:"/password",
-    element:<Password></Password>
+    element:<ProtectRoute><Password/></ProtectRoute>
       },
       {
         path:"/recovery",
-        element:<Recovery></Recovery>
+        element:<Recovery/>
           },
           {
             path:"profile",
-            element:<Profile></Profile>
+            element:<AutherizeUser><Profile/></AutherizeUser>
               },
               {
                 path:"/reset",
-                element:<Reset></Reset>
+                element:<Reset/>
                   },
                   {
                     path:"/pageNotFound",
-                    element:<PageNotFound></PageNotFound>
+                    element:<PageNotFound/>
                       },
 ]);
 
@@ -51,7 +54,7 @@ element:<Register></Register>
 function App() {
   return (
    <main>
-    <RouterProvider router={router}></RouterProvider>
+    <RouterProvider router={router}></RouterProvider> 
    </main>
   );
 }

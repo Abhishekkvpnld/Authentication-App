@@ -25,7 +25,7 @@ app.get('/',(req,res)=>{
 })
 
 /**Mongodb connection */
-const LOCAL_MONGODB_URL = "mongodb://127.0.0.1:27017/Authentication _app"
+const LOCAL_MONGODB_URL = "mongodb://127.0.0.1:27017/Authentication_app"
 mongoose.connect(LOCAL_MONGODB_URL,{
     // useNewUrlParser:true, 
     // useUnifiedTopology:true,   

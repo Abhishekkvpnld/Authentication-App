@@ -14,7 +14,7 @@ router.get('/createResetSession',controller.createResetSession)
 
 /**POST Method */
 router.post('/register',controller.register)
-router.post('registerMail',registerMail)
+router.post('/registerMail',registerMail)
 router.post('/authenticate',controller.verifyUser,(req,res)=>res.end());
 router.post('/login',controller.verifyUser,controller.login)
 
@@ -23,4 +23,4 @@ router.put('/updateuser',Auth,controller.uodateUser)
 router.put('/resetPassword',controller.verifyUser,controller.resetPassword)
 
 
-export default router;
+export default router; 

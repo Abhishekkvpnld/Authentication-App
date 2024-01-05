@@ -40,16 +40,15 @@
     border: 0;
     padding-left: 1.55rem;
     padding-right: 1.0rem; 
-    border-radius: 1.5rem; 
+    border-radius: 1rem; 
     padding-top: 1rem;
     padding-bottom: 1rem;
-    width: 95%; 
+    width: 100%; 
 display: flex;
 justify-content: center;
     font-size: 1.125rem; 
     outline: none;
 }
-
 .textbox:focus {
     box-shadow: 0 2px 8px rgba(9, 206, 203, 0.2);
 }
