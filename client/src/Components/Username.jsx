@@ -13,10 +13,6 @@ function Username() {
 const setUsername = useAuthStore(state =>state.setUsername)
 // const username = useAuthStore(state => state.auth.username)
 
-// useEffect(()=>{
-//   console.log(username)
-// })
-
   const formik = useFormik({
 
     initialValues:{

@@ -13,12 +13,14 @@ function Password() {
 
   const navigate = useNavigate();
 const {username} = useAuthStore(state=>state.auth);
-const [{isLoading,apiData,serverError}] = useFetch(`/user/${username}`)
+
+const {isLoading,apiData,serverError} = useFetch(`/user/${username}`);
+// console.log(isLoading+'        '+apiData+'       '+serverError);
 
   const formik = useFormik({
 
     initialValues:{
-      password:''
+      password:'admin@123'
     },
     validateOnBlur:false,
     validateOnChange:false,
@@ -26,17 +28,24 @@ const [{isLoading,apiData,serverError}] = useFetch(`/user/${username}`)
     onSubmit: async values =>{
       
 let loginPromise = verifyPassword({username,password:values.password})
+
 toast.promise(loginPromise,{
   loading:'Checking...!',
   success:<b>Login Successfull...!</b>,
   error:<b>Password Not Match...!</b>
 })
 
-loginPromise.then(res=>{
-  let { token } = res.data;
-  localStorage.setItem('token',token);
-  navigate('/profile')
-})
+loginPromise
+  .then(response => {
+    let token = response.data.token;
+    localStorage.setItem('token', token);
+    navigate('/profile');
+  })
+  .catch(error => {
+    console.error('Login failed:', error);
+    // Handle the error, display a message, or redirect to an error page if needed.
+  });
+
     }
   }); 
 

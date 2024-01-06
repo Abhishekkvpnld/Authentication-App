@@ -31,9 +31,16 @@ function Register() {
         error:<b>Could not Register...!</b>
       })
 console.log(registerPromise);
-registerPromise.then(()=>{
-  navigate('/')
-})
+registerPromise.then(() => {
+ 
+    navigate('/');
+ 
+}).catch((error) => {
+  console.error('Error during registration:', error);
+  // Handle the error as needed
+  toast.error('An error occurred during registration. Please try again.');
+});
+
       console.log(values)
     }
   }); 

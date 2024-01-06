@@ -8,22 +8,26 @@ import {profileValidation} from "../helper/Validate"
 import convertToBase64  from "../helper/convert"
 import useFetch from '../hooks/fetch_hook.jsx';
 import { updateUser } from '../helper/helper.jsx';
+import { useAuthStore } from '../store/store.js';
 
-function Profile() {
+function Profile() {  
 
 const navigate = useNavigate();
+const {username} = useAuthStore(state=>state.auth);
 
-  const [{isLoading,apiData,serverError}] = useFetch()
+const {isLoading,apiData,serverError} = useFetch(`/user/${username}`);
+  console.log( 'usefetch  '+isLoading+' '+apiData);
 
   const [file,setFile] = useState()
+  
   const formik = useFormik({
    
     initialValues:{
-      firstName: apiData?.firstName ||'',
+      firstName:apiData?.firstName || '',
       lastName:apiData?.lastName || '',
       email:apiData?.email || '',
-      mobile:apiData?.mobile || '',
-      adress:apiData?.adress || ''
+      mobile:apiData?.mobile ||'',
+      adress: apiData?.address ||''
     },
     enableReinitialize:true,
     validateOnBlur:false,
@@ -72,7 +76,7 @@ function userLogout() {
           <form className="py-1 " onSubmit={formik.handleSubmit}>
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-              <img src={apiData?.profile||file|| Avatar} alt="Avatar" className="profile_img" />
+              <img src={apiData?.profile|| file || Avatar} alt="Avatar" className="profile_img" />
               </label>
               <input onChange={onUpload} type="file" id='profile' name='profile' />
             </div>
@@ -98,7 +102,7 @@ function userLogout() {
             <div className="text-center py-4">
               <span className="text-grey-500">
                Come back later?{' '}
-             <button className='text-red-500' to='/' onClick={userLogout}></button>
+             <button className='text-red-500' to='/' onClick={userLogout}>Logout</button>
               </span>
             </div>
           </form>

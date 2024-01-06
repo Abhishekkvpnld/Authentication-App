@@ -44,9 +44,9 @@ export async function registerUser(credential) {
         let { username, email } = credential;
 
         /**send email */
-        if (status === 201) {
-            await axios.post('/api/registerMail', { username, userEmail:email, text:msg })
-        }
+        // if (status === 201) {
+        //     await axios.post('/api/registerMail', { username, userEmail:email, text:msg })
+        // }
 
     } catch (error) {
         return Promise.reject({ error })
@@ -68,7 +68,7 @@ export async function verifyPassword({ username, password }) {
 /**update user profile function */
 export async function updateUser(response) {
     try {
-        const token = await localStorage.getItem('token')
+        const token = localStorage.getItem('token')
         const data = await axios.put('/api/updateUser', response, { headers: { "Authorization": `Bearer ${token}` } })
 
         return Promise.resolve({ data })

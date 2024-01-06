@@ -64,36 +64,33 @@ export async function register(req, res) {
 export async function login(req, res) {
     const { username, password } = req.body;
     try {
+        const user = await userSchema.findOne({ username });
 
-        userSchema.findOne({ username })
-            .then(user => {
-                bcrypt.compare(password, user.password).then(passwordCheck => {
-                    if (!passwordCheck) return res.status(400).send({ error: "Don't have Password" })
+        if (!user) {
+            return res.status(404).send({ error: "Username not found" });
+        }
 
-                    /**Create JWT Token  */
-                    const token = jwt.sign({
-                        userId: user._id,
-                        username: user.username
-                    }, JWT_SECRET.JWT_SECRET, { expiresIn: "24h" })
+        const passwordCheck = await bcrypt.compare(password, user.password);
 
-                    return res.status(200).send({
-                        msg: "Login successful...!",
-                        username: user.username,
-                        token
-                    })
+        if (!passwordCheck) {
+            return res.status(400).send({ error: "Password does not match" });
+        }
 
-                }).catch(error => {
-                    return res.status(400).send({ error: "Password does not Match" })
-                })
-            })
-            .catch(error => {
-                return res.status(404).send({ error: "username not Found" })
-            })
+        const token = jwt.sign({
+            userId: user._id,
+            username: user.username
+        }, JWT_SECRET.JWT_SECRET, { expiresIn: "24h" });
 
-    } catch (error) {
-        return res.status(500).send({ error })
+        return res.status(200).send({
+            msg: "Login successful",
+            username: user.username,
+            token
+        });
+    } catch (error) { 
+        return res.status(500).send({ error: "Internal server error" });
     }
 }
+
 
 export async function getUser(req, res) {
 
@@ -101,18 +98,10 @@ export async function getUser(req, res) {
     try {
         if (!username) return res.status(501).send({ error: "Invalid Username" });
 
-        userSchema.findOne({ username }, (err, user) => {
-            if (err) return res.status(500).send({ err })
-            if (!user) return res.status(501).send({ error: "Couldn'tFind the User" })
+       const data = await userSchema.findOne({ username });
+       return res.status(201).send({data})
 
-            /**remove password from the user **/
-            /**mongoose return unnecessary data with object so converted it into json format**/
-
-            const { password, ...rest } = Object.assign({}, user.toJSON());
-
-            return res.status(201).send(rest);
-        })
-
+// console.log('userdata-------'+data)
     } catch (error) {
         return res.status(404).send({
             error: "Can't Find User Data"
@@ -162,8 +151,8 @@ export async function verifyOTP(req, res) {
 export async function createResetSession(req, res) {
 
     if (req.app.locals.resetSession) {
-        req.app.locals.resetSession = false
-        return res.status(201).send({ msg: "access granted" })
+
+        return res.status(201).send({ flag: req.app.locals.resetSession })
     }
     return res.status(440).send({ error: "Session expired!" })
 }

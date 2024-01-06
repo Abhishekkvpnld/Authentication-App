@@ -29,24 +29,24 @@ element:<Register/>
   },
   {
     path:"/password",
-    element:<ProtectRoute><Password/></ProtectRoute>
+    element:<Password/>
       },
-      {
-        path:"/recovery",
-        element:<Recovery/>
-          },
+      // {
+      //   path:"/recovery",
+      //   element:<Recovery/>
+      //     },
           {
-            path:"profile",
-            element:<AutherizeUser><Profile/></AutherizeUser>
+            path:"/profile",
+            element:<Profile/> //<AutherizeUser></AutherizeUser>
               },
-              {
-                path:"/reset",
-                element:<Reset/>
-                  },
-                  {
-                    path:"/pageNotFound",
-                    element:<PageNotFound/>
-                      },
+              // {
+              //   path:"/reset",
+              //   element:<Reset/>
+              //     },
+                  // {
+                  //   path:"/pageNotFound",
+                  //   element:<PageNotFound/>
+                  //     },
 ]);
 
 //App function
