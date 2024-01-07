@@ -31,7 +31,7 @@ element:<Register/>
     path:"/password",
     element:<Password/>
       },
-      // {
+      // { 
       //   path:"/recovery",
       //   element:<Recovery/>
       //     },

@@ -12,7 +12,7 @@ export async function getUsername(){
     const token = localStorage.getItem('token')
     if(!token)return Promise.reject('Cannot find Token')
     let decode = jwtDecode(token)
-console.log(decode)
+// console.log("decode   "+decode)
 return decode;
 }
 
@@ -58,6 +58,7 @@ export async function verifyPassword({ username, password }) {
     try {
         if (username) {
             const { data } = await axios.post('/api/login', { username, password })
+           console.log(data);
             return Promise.resolve({ data });
         }
     } catch (error) {
@@ -66,12 +67,19 @@ export async function verifyPassword({ username, password }) {
 }
 
 /**update user profile function */
-export async function updateUser(response) {
+export async function updateUser(updateData) {
+
+    // console.log(response);
     try {
         const token = localStorage.getItem('token')
-        const data = await axios.put('/api/updateUser', response, { headers: { "Authorization": `Bearer ${token}` } })
-
-        return Promise.resolve({ data })
+        const config = {
+            headers: {
+              Authorization: token, // Assuming 'token' is the authorization token
+            },
+          };
+        const response = await axios.put('/api/updateUser',updateData,config)
+console.log('response'+ response);
+        return Promise.resolve({response})  
 
     } catch (error) {
         return Promise.reject({ error: "Couldn't update Profile...!" })

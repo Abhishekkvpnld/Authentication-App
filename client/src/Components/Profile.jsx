@@ -8,33 +8,32 @@ import {profileValidation} from "../helper/Validate"
 import convertToBase64  from "../helper/convert"
 import useFetch from '../hooks/fetch_hook.jsx';
 import { updateUser } from '../helper/helper.jsx';
-import { useAuthStore } from '../store/store.js';
+// import { useAuthStore } from '../store/store.js';
 
 function Profile() {  
 
 const navigate = useNavigate();
-const {username} = useAuthStore(state=>state.auth);
+// const {username} = useAuthStore(state=>state.auth);
 
-const {isLoading,apiData,serverError} = useFetch(`/user/${username}`);
-  console.log( 'usefetch  '+isLoading+' '+apiData);
+const [{ isLoading, apiData, serverError }] = useFetch();
 
   const [file,setFile] = useState()
   
   const formik = useFormik({
    
     initialValues:{
-      firstName:apiData?.firstName || '',
-      lastName:apiData?.lastName || '',
-      email:apiData?.email || '',
-      mobile:apiData?.mobile ||'',
-      adress: apiData?.address ||''
+      firstName:apiData?.data.firstName || '',
+      lastName:apiData?.data.lastName || '',
+      email:apiData?.data.email || '',
+      mobile:apiData?.data.mobile ||'',
+      adress: apiData?.data.address ||''
     },
     enableReinitialize:true,
     validateOnBlur:false,
     validateOnChange:false,
     validate:profileValidation,
     onSubmit: async values =>{
-      values = Object.assign(values,{profile:file || apiData?.profile || ''})
+      values = Object.assign(values,{profile:file || apiData?.data.profile || ''})
       let updatePromise = updateUser(values)
 
       toast.promise(updatePromise,{
@@ -42,7 +41,7 @@ const {isLoading,apiData,serverError} = useFetch(`/user/${username}`);
         success:<b>Update Successfully...!</b>,
         error:<b>Could not Update...!</b>
       })
-      console.log(values)
+      // console.log(values)
     }
   }); 
 
@@ -76,7 +75,7 @@ function userLogout() {
           <form className="py-1 " onSubmit={formik.handleSubmit}>
             <div className="profile flex justify-center py-4">
               <label htmlFor="profile">
-              <img src={apiData?.profile|| file || Avatar} alt="Avatar" className="profile_img" />
+              <img src={apiData?.data.profile|| file || Avatar} alt="Avatar" className="profile_img" />
               </label>
               <input onChange={onUpload} type="file" id='profile' name='profile' />
             </div>

@@ -12,7 +12,7 @@ export async function verifyUser(req, res, next) {
         const { username } = req.method == 'GET' ? req.query : req.body;
 
         /**check the user existence */
-        let exist = await userSchema.findOne({ username })
+        let exist = await userSchema.findOne({username})
         if (!exist) return res.status(404).send({ error: "Can't find user" });
         next()
 
@@ -76,7 +76,7 @@ export async function login(req, res) {
             return res.status(400).send({ error: "Password does not match" });
         }
 
-        const token = jwt.sign({
+        const token = jwt.sign({ 
             userId: user._id,
             username: user.username
         }, JWT_SECRET.JWT_SECRET, { expiresIn: "24h" });
@@ -99,37 +99,45 @@ export async function getUser(req, res) {
         if (!username) return res.status(501).send({ error: "Invalid Username" });
 
        const data = await userSchema.findOne({ username });
+    //    console.log('userdata-------'+data)
        return res.status(201).send({data})
 
-// console.log('userdata-------'+data)
+
     } catch (error) {
-        return res.status(404).send({
+        return res.status(408).send({
             error: "Can't Find User Data"
         })
     }
 }
 
-export async function uodateUser(req, res) {
-    const id = req.query.id;
+export async function updateUser(req, res) {
 
     try {
 
-        if (id) {
-            // const body = req.body;
+        if(userId){
             const { userId } = req.user;
+      console.log('fdsssfsfs'+userId)
+            const updateField = req.body;
 
-            /**Update data */
-            userSchema.updateOne({ _id: userId }, body, function (err, data) {
-                if (err) throw err
-                return res.status(201).send({ msg: "Record Updated...!" })
-            })
+             /** Update data using findOneAndUpdate */
+             userSchema.findOneAndUpdate({ _id:userId }, updateField, { new: true }, function (err, updatedUser) {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).send({ error: "Internal Server Error" });
+                }
 
+                if (!updatedUser) {
+                    return res.status(404).send({ error: "User Not Found" });
+                }
+
+                return res.status(200).send({ msg: "Record Updated...!", updatedUser });
+            });
         } else {
-            return res.status(401).send({ error: "User Not Found....!" })
+            return res.status(401).send({ error: "User Not Found....!" });
         }
-
     } catch (error) {
-        return res.status(401).send({ error })
+        console.error(error);
+        return res.status(500).send({ error: "Internal Server Error" });
     }
 }
 
