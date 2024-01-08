@@ -5,14 +5,12 @@ import ENV from "../router/config.js";
 
 
 const nodeconfig = {
-    host: "smtp.forwardemail.net",
-  port: 465,
-  secure: true,
-  auth: {
-   
-    user: ENV.EMAIL,
-    pass: ENV.PASSWORD,
-  },
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+        user:ENV.EMAIL,
+        pass:ENV.PASSWORD
+    }
 } 
 
 const transporter = nodemailer.createTransport(nodeconfig);

@@ -72,11 +72,11 @@ export async function updateUser(updateData) {
     // console.log(response);
     try {
         const token = localStorage.getItem('token')
-        const config = {
-            headers: {
-                "Authorization" : `Bearer ${token}` // Assuming 'token' is the authorization token
-            },
-          };
+        // const config = {
+        //     headers: {
+        //         "Authorization" : `Bearer ${token}` // Assuming 'token' is the authorization token
+        //     },
+        //   };
         const response = await axios.put('/api/updateUser',updateData, { headers : { "Authorization" : `Bearer ${token}`}})
 console.log('response'+ response);
         return Promise.resolve({response})  
@@ -91,7 +91,6 @@ export async function generateOTP(username) {
     try {
 
         const { data: { code }, status } = await axios.get('/api/generateOTP', { params: { username } })
-alert(code)
         // /**send mail with OTP */
         if (status === 201) {
 

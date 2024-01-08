@@ -14,7 +14,7 @@ import Profile from './Components/Profile';
 
 
 //Auth middlewares
-import { AutherizeUser,ProtectRoute } from './Middlewares/auth';
+// import { AutherizeUser,ProtectRoute } from './Middlewares/auth';
 
 //All routes
 
