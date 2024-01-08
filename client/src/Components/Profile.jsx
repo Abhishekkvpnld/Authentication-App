@@ -26,7 +26,7 @@ const [{ isLoading, apiData, serverError }] = useFetch();
       lastName:apiData?.data.lastName || '',
       email:apiData?.data.email || '',
       mobile:apiData?.data.mobile ||'',
-      adress: apiData?.data.address ||''
+      adress: apiData?.data.adress ||''
     },
     enableReinitialize:true,
     validateOnBlur:false,

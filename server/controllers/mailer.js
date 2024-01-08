@@ -13,7 +13,7 @@ const nodeconfig = {
     user: ENV.EMAIL,
     pass: ENV.PASSWORD,
   },
-}
+} 
 
 const transporter = nodemailer.createTransport(nodeconfig);
 
@@ -29,32 +29,32 @@ var mailGenerator = new Mailgen({
 
 /**Register mail function */
 export const registerMail = async (req, res) => {
-    const { username, userMail, text, subject } = req.body;
-  
-    // Body of the mail
-    const mailContent = {
+  const { username, userEmail, text, subject } = req.body;
+  console.log(req.body);
+
+  // Body of the mail
+  const mailContent = {
       body: {
-        name: username,
-        intro: text || "Welcome, we are excited to have you on board.",
-        outro: "Need help or have questions? Just reply to this email."
+          name: username,
+          intro: text || "Welcome, we are excited to have you on board.",
+          outro: "Need help or have questions? Just reply to this email."
       }
-    };
-  
-    const mailBody = await mailGenerator.generate(mailContent);
-  
-    const message = {
+  };
+
+  const mailBody = await mailGenerator.generate(mailContent);
+
+  const message = {
       from: ENV.EMAIL,
-      to: userMail,
+      to: userEmail,  // Corrected variable name
       subject: subject,
       html: mailBody
-    };
-  
-    try {
+  };
+
+  try {
       await transporter.sendMail(message);
       return res.status(200).send({ msg: "You should receive an email from us" });
-    } catch (error) {
+  } catch (error) {
       console.error('Error sending email:', error);
       return res.status(500).send({ error: 'An error occurred while sending the email. Please try again.' });
-    }
-  };
-  
+  }
+};

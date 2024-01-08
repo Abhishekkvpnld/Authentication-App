@@ -14,7 +14,7 @@ router.get('/createResetSession',controller.createResetSession)
 
 /**POST Method */
 router.post('/register',controller.register)
-// router.post('/registerMail',registerMail)
+router.post('/registerMail',registerMail)
 router.post('/authenticate',controller.verifyUser,(req,res)=>res.end());
 router.post('/login',controller.verifyUser,controller.login)
 

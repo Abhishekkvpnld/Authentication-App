@@ -1,4 +1,4 @@
 export default {JWT_SECRET :'TXnodeDHLjdsdNDWSIlNMT=',
-EMAIL : "chase.farrell4@ethereal.email",
-PASSWORD: "htYhrkC8btaPpFmk1t"
+EMAIL : "anastacio.braun59@ethereal.email",
+PASSWORD: "Uem11c9kpDXHhMNw1V"
 }  

@@ -29,24 +29,24 @@ element:<Register/>
   },
   {
     path:"/password",
-    element:<Password/>
+    element:<Password/> //<ProtectRoute></ProtectRoute>
       },
-      // { 
-      //   path:"/recovery",
-      //   element:<Recovery/>
-      //     },
+      { 
+        path:"/recovery",
+        element:<Recovery/>
+          },
           {
             path:"/profile",
             element:<Profile/> //<AutherizeUser></AutherizeUser>
               },
-              // {
-              //   path:"/reset",
-              //   element:<Reset/>
-              //     },
-                  // {
-                  //   path:"/pageNotFound",
-                  //   element:<PageNotFound/>
-                  //     },
+              {
+                path:"/reset",
+                element:<Reset/>
+                  },
+                  {
+                    path:"/pageNotFound",
+                    element:<PageNotFound/>
+                      },
 ]);
 
 //App function

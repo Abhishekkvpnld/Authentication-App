@@ -13,11 +13,20 @@ function Recovery() {
 const [OTP,setOTP] = useState()
 
 useEffect(()=>{
-  generateOTP(username).then(()=>{
-    console.log(OTP)
-    if(OTP)return toast.success('OTP has been send to your email')
-    return toast.error('Problem while generating OTP')
+  generateOTP(username)
+  .then((OTP) => {
+    console.log(OTP);
+    if (OTP) {
+      toast.success('OTP has been sent to your email');
+    } else {
+      toast.error('Problem while generating OTP');
+    }
   })
+  .catch((error) => {
+    console.error('Error generating OTP:', error);
+    toast.error('An error occurred while generating OTP');
+  });
+
 },[username])
 
 

@@ -44,9 +44,9 @@ export async function registerUser(credential) {
         let { username, email } = credential;
 
         /**send email */
-        // if (status === 201) {
-        //     await axios.post('/api/registerMail', { username, userEmail:email, text:msg })
-        // }
+        if (status === 201) {
+            await axios.post('/api/registerMail', { username, userEmail:email, text:msg })
+        }
 
     } catch (error) {
         return Promise.reject({ error })
@@ -74,10 +74,10 @@ export async function updateUser(updateData) {
         const token = localStorage.getItem('token')
         const config = {
             headers: {
-              Authorization: token, // Assuming 'token' is the authorization token
+                "Authorization" : `Bearer ${token}` // Assuming 'token' is the authorization token
             },
           };
-        const response = await axios.put('/api/updateUser',updateData,config)
+        const response = await axios.put('/api/updateUser',updateData, { headers : { "Authorization" : `Bearer ${token}`}})
 console.log('response'+ response);
         return Promise.resolve({response})  
 
@@ -91,12 +91,14 @@ export async function generateOTP(username) {
     try {
 
         const { data: { code }, status } = await axios.get('/api/generateOTP', { params: { username } })
-
-        /**send mail with OTP */
+alert(code)
+        // /**send mail with OTP */
         if (status === 201) {
-            let { data: { email } } = await getUser({ username });
+
+            let { data } = await getUser({ username });
+
             let text = `Your password Recovery OTP is ${code}.Verify and recover your password.`;
-            await axios.post('/api/registerMail', { username, userEmail: email, text, subject: "Password Recovery OTP" })
+            await axios.post('/api/registerMail', { username, userEmail: data.data.email, text, subject: "Password Recovery OTP" })
         }
 
         return Promise.resolve(code);

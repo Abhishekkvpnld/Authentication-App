@@ -6,15 +6,21 @@ export default async function Auth(req,res,next){
 try{
     console.log('auth file')
     /**access autherize header to validate request */
-    const token = req.headers.autherization.split("")[1]
+   const token = req.headers.authorization.split(" ")[1];
+
+console.log(token);
     /**retrive the user details for the logged in user */
 
-const decodedToken = await jwt.verify(token,JWT_token.JWT_SECRET)
+const decodedToken = jwt.verify(token,JWT_token.JWT_SECRET)
 
-req.user =decodedToken;
-
+if(token){
+    req.user =decodedToken;
 // res.json(decodedToken)
 next()
+}else{
+    alert('no data')
+}
+
 }catch(error){
     return res.status(401).json({error:"Authentication Failed"})
 }

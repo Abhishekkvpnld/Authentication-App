@@ -111,44 +111,43 @@ export async function getUser(req, res) {
 }
 
 export async function updateUser(req, res) {
-
     try {
-
-        if(userId){
-            const { userId } = req.user;
-      console.log('fdsssfsfs'+userId)
-            const updateField = req.body;
-
-             /** Update data using findOneAndUpdate */
-             userSchema.findOneAndUpdate({ _id:userId }, updateField, { new: true }, function (err, updatedUser) {
-                if (err) {
-                    console.error(err);
-                    return res.status(500).send({ error: "Internal Server Error" });
-                }
-
-                if (!updatedUser) {
-                    return res.status(404).send({ error: "User Not Found" });
-                }
-
-                return res.status(200).send({ msg: "Record Updated...!", updatedUser });
-            });
-        } else {
-            return res.status(401).send({ error: "User Not Found....!" });
-        }
+      const { userId } = req.user;
+      const updateData = req.body;
+ console.log(userId);
+      if (!userId) {
+        return res.status(401).send({ error: "User Not Found....!" });
+      }
+  
+      // Use findOneAndUpdate with promises
+      const updatedUser = await userSchema.findOneAndUpdate(
+        { _id: userId }, // Find the user by its _id
+        updateData,      // Update the user with the provided data
+        { new: true }    // Return the modified document
+      );
+      
+      console.log(updateUser);
+      if (!updatedUser) {
+        return res.status(404).send({ error: "User not found" });
+      }
+  
+      return res.status(201).send({ msg: "Record Updated...!", updatedUser });
     } catch (error) {
-        console.error(error);
-        return res.status(500).send({ error: "Internal Server Error" });
+      console.error('Error updating user:', error);
+      return res.status(500).send({ error: 'Internal Server Error' });
     }
-}
+  }
+  
 
 export async function generateOTP(req, res) {
     req.app.locals.OTP = await otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false })
+  console.log(req.app.locals.OTP);
     res.status(201).send({ code: req.app.locals.OTP })
 }
 
 export async function verifyOTP(req, res) {
     const { code } = req.query;
-    if (parseInt(req.app.locals.OTP == parseInt(code))) {
+    if (parseInt(req.app.locals.OTP) == parseInt(code)) {
         req.app.locals.OTP = null; // reset the OTP value
         req.app.locals.resetSession = true // start session for reset password
         return res.status(201).send({ msg: "verify Successfully...!" })
@@ -169,27 +168,24 @@ export async function resetPassword(req, res) {
     try {
         if (!req.app.locals.resetSession) return res.status(440).send({ error: "Session expired!" });
         const { username, password } = req.body
+        // console.log(req.body)
 
         try {
-
-            userSchema.findOne({ username })
-                .then(user => {
-                    bcrypt.hash(password, 10).then(hashedPassword => {
-                        userSchema.updateOne({ username: user.username }, { password: hashedPassword }, function (err, data) {
-                            if (err) throw err
-                            return res.status(201).send({ msg: "Record Updated...!" })
-                        })
-                    })
-                        .catch(err => {
-                            return res.status(500).send({ error: "Enable to hashed Password" })
-                        })
-                })
-                .catch(error => {
-                    return res.status(404).send({ error: "Username not Found" })
-                })
-        } catch (error) {
-            return res.status(500).send({ error })
-        }
+            const user = await userSchema.findOne({ username });
+          
+            if (!user) {
+              return res.status(404).send({ error: "Username not found....!!" });
+            }
+          
+            const hashedPassword = await bcrypt.hash(password, 10);
+          
+            await userSchema.updateOne({ username: user.username }, { password: hashedPassword });
+          
+            return res.status(201).send({ msg: "Record Updated...!" });
+          } catch (error) {
+            console.error("Error updating password:", error);
+            return res.status(500).send({ error: "Internal Server Error...!!" });
+          }
 
     } catch (error) {
         return res.status(401).send({ error })
