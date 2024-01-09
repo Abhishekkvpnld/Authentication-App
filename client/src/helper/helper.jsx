@@ -2,7 +2,7 @@ import axios from "axios";
 import { jwtDecode } from 'jwt-decode';
 
 /********Setting baseUrl********/
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN
+axios.defaults.baseURL =  'https://authentication-app-1cc3.onrender.com'  //Backend sever domain setting
 
 /**Make api Requests */
 
