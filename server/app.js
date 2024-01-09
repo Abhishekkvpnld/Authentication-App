@@ -3,6 +3,7 @@ import cors from "cors"
 import mongoose from "mongoose";
 import morgan from "morgan";
 import router from "./router/router.js";
+import ENV from './router/config.js'
 
 const app = express();
 
@@ -25,8 +26,7 @@ app.get('/',(req,res)=>{
 })
 
 /**Mongodb connection */
-const LOCAL_MONGODB_URL = "mongodb://127.0.0.1:27017/Authentication_app"
-mongoose.connect(LOCAL_MONGODB_URL,{
+mongoose.connect(ENV.MONGODB_ATLAS,{ 
     // useNewUrlParser:true, 
     // useUnifiedTopology:true,   
 }).then(()=>{
