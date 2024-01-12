@@ -22,7 +22,7 @@ app.use('/api',router)
 
 /**HTTP GET request */
 app.get('/',(req,res)=>{
-     res.status(201).json('Home GET request')
+     res.status(201).json('Home GET request ------authentication app')
 })
 
 /**Mongodb connection */
