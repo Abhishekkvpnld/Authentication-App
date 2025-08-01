@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: auth_app_client
+    ports:
+      - "5000:5000"
+    command: npm start
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: auth_app_server
+    depends_on:
+      - mongo
+    ports:
+      - "3000:3000"
+    command: npm start
+
+  mongo:
+    image: mongo:6
+    container_name: auth_app_mongodb
+    ports:
+      - "27017:27017"

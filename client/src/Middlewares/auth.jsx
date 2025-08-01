@@ -13,7 +13,7 @@ export const AutherizeUser = ({Children})=>{
 export const ProtectRoute = ({Children})=>{ 
     const username = useAuthStore(state => state.auth.username);
     if(!username){
-        return <Navigate to={'/'} replace={true}></Navigate>
+        return <Navigate to={'/'} replace={true}/>
     }
     return Children;
 }
